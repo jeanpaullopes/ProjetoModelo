@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "120993765630",
+    "project_id": "projeto-modelo-54f25",
+    "storage_bucket": "projeto-modelo-54f25.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:120993765630:android:1a922e15eecccd4ed06daf",
+        "android_client_info": {
+          "package_name": "br.edu.uniritter.mobile.aplicacaomodelo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "120993765630-e01svih6thc1jjll60dan6ma4cfeh12u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDglxCjaYRb4HgTvPrzrcAuC_wl7dg8CoA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "120993765630-e01svih6thc1jjll60dan6ma4cfeh12u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

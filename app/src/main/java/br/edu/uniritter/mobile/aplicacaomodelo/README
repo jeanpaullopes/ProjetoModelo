@@ -1,0 +1,9 @@
+primeiro passo para o Firebase Authentication
+
+- incluir a dependência no Gradle
+        implementation 'com.firebaseui:firebase-ui-auth:6.4.0'
+
+        lembre de fazer o Sync
+
+- adicionar o plugin do google services no gradle do proheto e da aplicação
+
