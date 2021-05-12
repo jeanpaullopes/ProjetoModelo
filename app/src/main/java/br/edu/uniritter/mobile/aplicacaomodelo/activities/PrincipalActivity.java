@@ -26,7 +26,13 @@ public class PrincipalActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_principal);
+        if (1 == 2) {
+            setContentView(R.layout.activity_principal);
+
+        } else {
+            setContentView(R.layout.produto_tipo_1);
+            findViewById(R.id.textView3);
+        }
         FirebaseFirestore store = FirebaseServices.getFirebaseFirestoreInstance();
 
         Query query = store.collection("chat").orderBy("datahora").limit(100);
@@ -52,6 +58,7 @@ public class PrincipalActivity extends AppCompatActivity {
                 }
         );
         query.get();
+
 
 
     }

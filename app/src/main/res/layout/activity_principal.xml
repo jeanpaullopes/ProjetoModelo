@@ -13,4 +13,13 @@
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textDirection="firstStrong"
+        app:srcCompat="@drawable/ic_launcher_foreground"
+        tools:layout_editor_absoluteX="157dp"
+        tools:layout_editor_absoluteY="180dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
