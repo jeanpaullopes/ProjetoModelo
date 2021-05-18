@@ -1,9 +1,12 @@
 package br.edu.uniritter.mobile.aplicacaomodelo.model;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentId;
 
 public class ChatMensagem {
 
+    @DocumentId
+    private String id;
     private String user;
     private String mensagem;
     private Timestamp datahora;
@@ -42,9 +45,17 @@ public class ChatMensagem {
         this.datahora = dataHora;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String toString() {
-        return "Nome: "+this.user+"\n"+
+        return "id: "+this.id+"\n+" +
+                "Nome: "+this.user+"\n"+
                 "data: "+this.datahora+"\n"+
                 this.mensagem;
     }

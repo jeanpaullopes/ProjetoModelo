@@ -2,8 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.edu.uniritter.mobile.aplicacaomodelo">
 
-
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,13 +9,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AplicacaoModelo">
+        <receiver
+            android:name=".Receivers.MyReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.AIRPLANE_MODE"/>
+
+            </intent-filter>
+        </receiver>
+        <service android:name=".services.AppIntentService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
         <activity
             android:name=".activities.PrincipalActivity"
-            android:label="@string/title_activity_principal">
-
-        </activity>
-
-
+            android:label="@string/title_activity_principal"></activity>
         <activity
             android:name=".activities.SplashScreen"
             android:configChanges="orientation|keyboardHidden|screenSize"

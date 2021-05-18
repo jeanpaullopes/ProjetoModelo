@@ -5,7 +5,10 @@ import android.annotation.SuppressLint;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
@@ -22,6 +25,7 @@ import java.util.List;
 
 
 import br.edu.uniritter.mobile.aplicacaomodelo.R;
+import br.edu.uniritter.mobile.aplicacaomodelo.Receivers.MyReceiver;
 import br.edu.uniritter.mobile.aplicacaomodelo.services.FirebaseServices;
 
 /**
@@ -51,6 +55,12 @@ public class SplashScreen extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
 
         mVisible = true;
+        BroadcastReceiver receiver = new MyReceiver();
+        IntentFilter itf = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        itf.addAction(Intent.ACTION_SCREEN_OFF);
+        //itf.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        itf.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+        this.registerReceiver(receiver,itf);
 
 
 
@@ -92,6 +102,7 @@ public class SplashScreen extends AppCompatActivity {
                 Toast.makeText(this, "Deu certo, "+FirebaseServices.getFirebaseUser().getDisplayName(), Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(this, PrincipalActivity.class);
                 startActivity(intent);
+
                 // ...
             } else {
                 // Sign in failed. If response is null the user canceled the
