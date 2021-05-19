@@ -31,6 +31,8 @@ public class PrincipalActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
+
+
         ChatMensagemServices.getChatMensagens(new ChatMensagemServices.ChatMensagensCallback() {
             @Override
             public void OnListChatMensagemCallback(List<ChatMensagem> lista) {

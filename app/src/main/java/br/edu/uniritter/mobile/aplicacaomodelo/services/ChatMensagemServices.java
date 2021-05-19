@@ -54,18 +54,23 @@ public class ChatMensagemServices {
 
     public static void gravaChatMensagem(ChatMensagem msg) {
         FirebaseFirestore store = FirebaseServices.getFirebaseFirestoreInstance();
-        store.collection("chat").add(msg)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d("firestore", "DocumentSnapshot written with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("firestore", "Error adding document", e);
-                    }
-                });
+        // teste para saber se adiciona ou muda
+        if(msg.getId() == null) {
+            store.collection("chat").add(msg)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Log.d("firestore", "DocumentSnapshot written with ID: " + documentReference.getId());
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w("firestore", "Error adding document", e);
+                        }
+                    });
+        } else {
+            store.collection("chat").document(msg.getId()).set(msg);
+        }
     }
 }

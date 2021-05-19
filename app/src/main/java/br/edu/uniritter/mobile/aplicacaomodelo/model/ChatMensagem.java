@@ -7,6 +7,7 @@ public class ChatMensagem {
 
     @DocumentId
     private String id;
+
     private String user;
     private String mensagem;
     private Timestamp datahora;
@@ -57,6 +58,6 @@ public class ChatMensagem {
         return "id: "+this.id+"\n+" +
                 "Nome: "+this.user+"\n"+
                 "data: "+this.datahora+"\n"+
-                this.mensagem;
+                this.mensagem+"\n"+"\n";
     }
 }

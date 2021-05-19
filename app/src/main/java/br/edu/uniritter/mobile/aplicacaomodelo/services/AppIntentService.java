@@ -14,7 +14,8 @@ import java.util.Calendar;
 
 // Declarar o serviço no Manifesto
 
-public class AppIntentService extends JobIntentService{
+public class AppIntentService extends JobIntentService {
+
     private static ThreadAppService minhaThread;
 
 
@@ -68,14 +69,13 @@ public class AppIntentService extends JobIntentService{
             super.run();
             while (!this.isInterrupted() && this.running)  {
                 try {
-                    sleep(5000);
+                    sleep(60000);
                 } catch (InterruptedException e) {
                     //e.printStackTrace();
                     this.running = false;
                 }
 
                 Log.d("MyService", "aqui "+ Calendar.getInstance().getTime());
-                NotificationService.criarCanalNotificacao(this.context);
                 NotificationService.criaNotificacao(++id,"hora atual:\n"+
                         Calendar.getInstance().getTime().toString());
             }

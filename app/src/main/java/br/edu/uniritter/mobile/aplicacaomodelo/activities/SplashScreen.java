@@ -1,23 +1,16 @@
 package br.edu.uniritter.mobile.aplicacaomodelo.activities;
 
-import android.annotation.SuppressLint;
-
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
-import com.google.firebase.auth.FirebaseUser;
 
 
 import java.util.Arrays;
@@ -25,8 +18,9 @@ import java.util.List;
 
 
 import br.edu.uniritter.mobile.aplicacaomodelo.R;
-import br.edu.uniritter.mobile.aplicacaomodelo.Receivers.MyReceiver;
+import br.edu.uniritter.mobile.aplicacaomodelo.receivers.MyReceiver;
 import br.edu.uniritter.mobile.aplicacaomodelo.services.FirebaseServices;
+import br.edu.uniritter.mobile.aplicacaomodelo.services.NotificationService;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -55,12 +49,17 @@ public class SplashScreen extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
 
         mVisible = true;
+
+        // registrando BoradcastReceiver e seus IntentFilters
         BroadcastReceiver receiver = new MyReceiver();
         IntentFilter itf = new IntentFilter(Intent.ACTION_SCREEN_ON);
         itf.addAction(Intent.ACTION_SCREEN_OFF);
         //itf.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         itf.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
         this.registerReceiver(receiver,itf);
+        //cria canal de notificação
+        NotificationService.criarCanalNotificacao(this);
+
 
 
 
@@ -87,6 +86,10 @@ public class SplashScreen extends AppCompatActivity {
                         .setAvailableProviders(providers)
                         .build(),
                 RC_SIGN_IN);
+    }
+
+    public void clickNotificacao(View v) {
+        NotificationService.criaNotificacao(999, "notificação vinda da splash (botão)");
     }
 
     @Override
