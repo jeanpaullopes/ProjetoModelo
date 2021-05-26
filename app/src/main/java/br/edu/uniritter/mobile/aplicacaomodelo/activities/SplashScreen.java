@@ -1,17 +1,27 @@
 package br.edu.uniritter.mobile.aplicacaomodelo.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.text.Layout;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 
+
+import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +36,7 @@ import br.edu.uniritter.mobile.aplicacaomodelo.services.NotificationService;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class SplashScreen extends AppCompatActivity {
+public class SplashScreen extends AppCompatActivity implements SensorEventListener {
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -40,6 +50,7 @@ public class SplashScreen extends AppCompatActivity {
 
     private View mControlsView;
     private boolean mVisible;
+    private int background = 0;
 
 
     @Override
@@ -62,13 +73,26 @@ public class SplashScreen extends AppCompatActivity {
 
 
 
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SensorManager sm = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        Sensor sensor = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        Sensor sensor1 = sm.getDefaultSensor(Sensor.TYPE_LIGHT);
+
+        sm.registerListener(this,sensor,SensorManager.SENSOR_DELAY_NORMAL);
+        sm.registerListener(this, sensor1, SensorManager.SENSOR_DELAY_NORMAL);
 
     }
 
-
-
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SensorManager sm = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        sm.unregisterListener(this);
+    }
 
     public void onClick(View v) {
         List<AuthUI.IdpConfig> providers = Arrays.asList(
@@ -116,4 +140,31 @@ public class SplashScreen extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        //Log.d("Sensor",sensorEvent.sensor.getName());
+
+        Log.d("Sensor",sensorEvent.values[0]+"");
+        //Log.d("Sensor",sensorEvent.values[0]+", "+sensorEvent.values[1]+", "+sensorEvent.values[2]);
+        //if (sensorEvent.values[0] > 1 || sensorEvent.values[0]< -1 ) {
+        //    Log.d("Sensor",(int)sensorEvent.values[0]+", "+sensorEvent.values[1]+", "+sensorEvent.values[2]);
+        //    trocaGradiante(sensorEvent.values[0]);
+        //}
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
+    }
+
+    private void trocaGradiante(float direcao) {
+        ConstraintLayout layout = (ConstraintLayout) findViewById(R.id.layoutSplashScreen);
+        if (direcao > 0) {
+            layout.setBackgroundResource(R.drawable.gradiante2);
+            background = 1;
+        } else {
+            layout.setBackgroundResource(R.drawable.gradiante1);
+            background = 0;
+        }
+    }
 }

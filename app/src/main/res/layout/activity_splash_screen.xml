@@ -4,13 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradiante1"
     android:theme="@style/ThemeOverlay.AplicacaoModelo.FullscreenContainer"
-    tools:context=".activities.SplashScreen" >
+    tools:context=".activities.SplashScreen">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/gradiante1"
+        android:id="@+id/layoutSplashScreen"
+
+        >
 
         <ImageView
             android:id="@+id/imageView"

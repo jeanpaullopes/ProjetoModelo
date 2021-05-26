@@ -1,11 +1,18 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   package br.edu.uniritter.mobile.aplicacaomodelo.activities;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,7 +51,25 @@ public class PrincipalActivity extends AppCompatActivity {
             }
         });
 
+        WebView wb = (WebView) findViewById(R.id.webView1);
+        WebSettings webSettings = wb.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        wb.setWebViewClient(new WebViewClient(){
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                if((String.valueOf(request.getUrl())).contains("external=true")) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, request.getUrl());
+                    view.getContext().startActivity(intent);
+                    return true;
+                } else {
+                    view.loadUrl(String.valueOf(request.getUrl()));
+                }
 
+                return true;
+            }
+        });
+        wb.loadUrl("https://developers.google.com/chart/interactive/docs/gallery/areachart#a-simple-example");
 
     }
     public void onClickSalva(View v) {
