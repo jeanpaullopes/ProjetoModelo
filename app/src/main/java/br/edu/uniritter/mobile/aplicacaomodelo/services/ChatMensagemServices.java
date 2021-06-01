@@ -26,7 +26,7 @@ public class ChatMensagemServices {
     public static void getChatMensagens(ChatMensagensCallback callback) {
         FirebaseFirestore store = FirebaseServices.getFirebaseFirestoreInstance();
 
-        Query query = store.collection("chat").orderBy("datahora").limit(100);
+        Query query = store.collection("chat").orderBy("datahora", Query.Direction.DESCENDING).limit(100);
         query.addSnapshotListener(
                 new EventListener<QuerySnapshot>() {
                     @Override
@@ -70,7 +70,9 @@ public class ChatMensagemServices {
                         }
                     });
         } else {
-            store.collection("chat").document(msg.getId()).set(msg);
+            //store.collection("chat").document(msg.getId()).set(msg);
+            store.collection("chat").document(msg.getId()).update("lido", msg.isLido());
+
         }
     }
 }

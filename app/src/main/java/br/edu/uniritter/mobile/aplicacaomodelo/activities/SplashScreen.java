@@ -3,6 +3,7 @@ package br.edu.uniritter.mobile.aplicacaomodelo.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.app.ActivityOptions;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,12 +14,17 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.text.Layout;
+import android.transition.Explode;
+import android.transition.Fade;
+import android.transition.Slide;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.firebase.auth.FirebaseAuth;
 
 
 import org.json.JSONObject;
@@ -56,6 +62,11 @@ public class SplashScreen extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // inside your activity (if you did not enable transitions in your theme)
+        getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
+        getWindow().setEnterTransition(new Fade());
+        getWindow().setExitTransition(new Fade());
+
 
         setContentView(R.layout.activity_splash_screen);
 
@@ -73,6 +84,9 @@ public class SplashScreen extends AppCompatActivity implements SensorEventListen
 
 
 
+
+
+
     }
 
     @Override
@@ -82,8 +96,9 @@ public class SplashScreen extends AppCompatActivity implements SensorEventListen
         Sensor sensor = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         Sensor sensor1 = sm.getDefaultSensor(Sensor.TYPE_LIGHT);
 
-        sm.registerListener(this,sensor,SensorManager.SENSOR_DELAY_NORMAL);
+        sm.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
         sm.registerListener(this, sensor1, SensorManager.SENSOR_DELAY_NORMAL);
+
 
     }
 
@@ -95,21 +110,28 @@ public class SplashScreen extends AppCompatActivity implements SensorEventListen
     }
 
     public void onClick(View v) {
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().build(),
-                //new AuthUI.IdpConfig.PhoneBuilder().build(),
-                new AuthUI.IdpConfig.GoogleBuilder().build()
-                //new AuthUI.IdpConfig.FacebookBuilder().build(),
-                //new AuthUI.IdpConfig.TwitterBuilder().build()
-                );
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
 
-        // Create and launch sign-in intent
-        startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(providers)
-                        .build(),
-                RC_SIGN_IN);
+            List<AuthUI.IdpConfig> providers = Arrays.asList(
+                    new AuthUI.IdpConfig.EmailBuilder().build(),
+                    //new AuthUI.IdpConfig.PhoneBuilder().build(),
+                    new AuthUI.IdpConfig.GoogleBuilder().build()
+                    //new AuthUI.IdpConfig.FacebookBuilder().build(),
+                    //new AuthUI.IdpConfig.TwitterBuilder().build()
+            );
+
+            // Create and launch sign-in intent
+            startActivityForResult(
+                    AuthUI.getInstance()
+                            .createSignInIntentBuilder()
+                            .setAvailableProviders(providers)
+                            .build(),
+                    RC_SIGN_IN);
+        } else {
+            Intent intent = new Intent(this, PrincipalActivity.class);
+            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+
+        }
     }
 
     public void clickNotificacao(View v) {
@@ -126,7 +148,7 @@ public class SplashScreen extends AppCompatActivity implements SensorEventListen
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
                 FirebaseServices.setFirebaseUser( FirebaseServices.getFirebaseAuthInstance().getCurrentUser() );
-                Toast.makeText(this, "Deu certo, "+FirebaseServices.getFirebaseUser().getDisplayName(), Toast.LENGTH_LONG).show();
+//                Toast.makeText(this, "Deu certo, "+FirebaseServices.getFirebaseUser().getDisplayName(), Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(this, PrincipalActivity.class);
                 startActivity(intent);
 
@@ -144,12 +166,18 @@ public class SplashScreen extends AppCompatActivity implements SensorEventListen
     public void onSensorChanged(SensorEvent sensorEvent) {
         //Log.d("Sensor",sensorEvent.sensor.getName());
 
-        Log.d("Sensor",sensorEvent.values[0]+"");
+        //Log.d("Sensor",sensorEvent.values[0]+"");
         //Log.d("Sensor",sensorEvent.values[0]+", "+sensorEvent.values[1]+", "+sensorEvent.values[2]);
-        //if (sensorEvent.values[0] > 1 || sensorEvent.values[0]< -1 ) {
-        //    Log.d("Sensor",(int)sensorEvent.values[0]+", "+sensorEvent.values[1]+", "+sensorEvent.values[2]);
-        //    trocaGradiante(sensorEvent.values[0]);
-        //}
+        if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            if (sensorEvent.values[0] > 1 || sensorEvent.values[0] < -1) {
+                Log.d("Sensor", sensorEvent.values[0] + ", " + sensorEvent.values[1] + ", " + sensorEvent.values[2]);
+                trocaGradiante(sensorEvent.values[0]);
+            }
+        }
+        if (sensorEvent.sensor.getType() == Sensor.TYPE_LIGHT) {
+                Log.d("Sensor", sensorEvent.values[0] + ", " );
+
+        }
     }
 
     @Override
