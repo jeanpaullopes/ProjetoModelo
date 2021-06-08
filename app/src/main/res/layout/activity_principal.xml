@@ -63,6 +63,8 @@
         android:layout_marginVertical="5dp"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
+        android:background="@drawable/gradiante1"
+        android:padding="10dp"
         android:visibility="invisible"
         app:contentPadding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"

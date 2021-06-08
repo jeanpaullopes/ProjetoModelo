@@ -41,13 +41,17 @@ public class ChatMensagemAdapter extends RecyclerView.Adapter<ChatMensagemAdapte
         holder.layout.setObjChat(mensagens.get(position));
     }
 
+
+
     public void setChats(List<ChatMensagem> lista) {
         this.mensagens = lista;
     }
+
     @Override
     public int getItemCount() {
         return mensagens.size();
     }
+
     @BindingAdapter({"chatAdapterImageUrl"})
     public static void loadImage(ImageView view, String url) {
         Picasso.get().load(url).into(view);

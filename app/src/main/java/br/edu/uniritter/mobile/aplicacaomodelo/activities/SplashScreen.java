@@ -195,4 +195,9 @@ public class SplashScreen extends AppCompatActivity implements SensorEventListen
             background = 0;
         }
     }
+
+    public void onClickNav(View v) {
+        Intent intent = new Intent(this,MainNavActivity.class);
+        startActivity(intent);
+    }
 }

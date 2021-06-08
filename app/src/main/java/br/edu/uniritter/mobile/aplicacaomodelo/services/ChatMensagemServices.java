@@ -72,7 +72,11 @@ public class ChatMensagemServices {
         } else {
             //store.collection("chat").document(msg.getId()).set(msg);
             store.collection("chat").document(msg.getId()).update("lido", msg.isLido());
-
+            /*
+            CollectionReference colletion = store.collection("chat");
+            DocumentReference document = colletion.document(msg.getId());
+            document.update("lido", msg.isLido());
+            */
         }
     }
 }

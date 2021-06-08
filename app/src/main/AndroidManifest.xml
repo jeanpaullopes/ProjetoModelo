@@ -9,21 +9,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AplicacaoModelo">
+        <activity
+            android:name=".activities.MainNavActivity"
+            android:label="@string/title_activity_main_nav"></activity>
+
         <receiver
             android:name=".receivers.MyReceiver"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
-        <service android:name=".services.AppIntentService"
+        <service
+            android:name=".services.AppIntentService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-
 
         <activity
             android:name=".activities.PrincipalActivity"
-            android:label="@string/title_activity_principal"></activity>
+            android:label="@string/title_activity_principal" />
         <activity
             android:name=".activities.SplashScreen"
             android:configChanges="orientation|keyboardHidden|screenSize"

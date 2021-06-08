@@ -44,46 +44,32 @@ import java.util.List;
 
 import br.edu.uniritter.mobile.aplicacaomodelo.R;
 import br.edu.uniritter.mobile.aplicacaomodelo.adapters.ChatMensagemAdapter;
+import br.edu.uniritter.mobile.aplicacaomodelo.model.Address;
 import br.edu.uniritter.mobile.aplicacaomodelo.model.ChatMensagem;
+import br.edu.uniritter.mobile.aplicacaomodelo.model.Geo;
+import br.edu.uniritter.mobile.aplicacaomodelo.model.User;
+import br.edu.uniritter.mobile.aplicacaomodelo.presenters.MainPresenter;
+import br.edu.uniritter.mobile.aplicacaomodelo.presenters.MainPresenterContrato;
 import br.edu.uniritter.mobile.aplicacaomodelo.services.ChatMensagemServices;
 import br.edu.uniritter.mobile.aplicacaomodelo.services.FirebaseServices;
 
-public class PrincipalActivity extends AppCompatActivity {
+public class PrincipalActivity extends AppCompatActivity
+              implements MainPresenterContrato.ViewContrato {
 
 
     private ChatMensagemAdapter chatAdapter;
-    LinearLayoutManager llm;
+
+
+    private MainPresenterContrato.PresenterContrato presenter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_principal);
+        this.presenter = new MainPresenter(this);
         getWindow().setEnterTransition(new Fade());
         getWindow().setExitTransition(new Fade());
 
-        setContentView(R.layout.activity_principal);
-        RecyclerView rv = findViewById(R.id.rvChat);
-        llm = new LinearLayoutManager(this);
-        rv.setLayoutManager(llm);
-
-        //chatAdapter = new ChatMensagemAdapter(new ArrayList<ChatMensagem>());
-        //rv.setAdapter(chatAdapter);
-
-        ChatMensagemServices.getChatMensagens(new ChatMensagemServices.ChatMensagensCallback() {
-            @Override
-            public void OnListChatMensagemCallback(List<ChatMensagem> lista) {
-                String txt = "";
-                for(ChatMensagem msg : lista) {
-                    txt += msg.toString();
-                }
-                Log.d("Principal", txt);
-                chatAdapter = new ChatMensagemAdapter(lista);
-                RecyclerView rv = findViewById(R.id.rvChat);
-                rv.setLayoutManager(llm);
-                rv.setAdapter(chatAdapter);
-
-
-            }
-        });
-
+        /*
         WebView wb = (WebView) findViewById(R.id.webView1);
         WebSettings webSettings = wb.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -103,51 +89,76 @@ public class PrincipalActivity extends AppCompatActivity {
             }
         });
         //wb.loadUrl("https://uniritter.edu.br");
-
+        */
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.buscarDados();
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        this.presenter = null;
+    }
 
     public void onClickSalva(View v) {
-        ChatMensagem chat = new ChatMensagem("Android","teste de mensagem",
-                new Timestamp(Calendar.getInstance().getTime()));
-        ChatMensagemServices.gravaChatMensagem(chat);
+        //ChatMensagem chat = new ChatMensagem("Android","teste de mensagem",
+        //        new Timestamp(Calendar.getInstance().getTime()));
+        //ChatMensagemServices.gravaChatMensagem(chat);
+        presenter.gravaMensagem("Android","teste de mensagem");
     }
 
     public void clickNovaMensagem(View v) {
-        Toast.makeText(this,"no novo",Toast.LENGTH_LONG).show();
-        CardView cv = (CardView) findViewById(R.id.cardMensagem);
-        EditText ed = findViewById(R.id.editTextTextMultiLine);
-        ed.setText("");
-        cv.setVisibility(View.VISIBLE);
+        mostraEditMensagem();
 
     }
     public void clickCancelarMensagem(View v) {
+        escondeEditMensagem();
+
+    }
+    public void clickGravaMensagem(View v) {
+        EditText ed = findViewById(R.id.editTextTextMultiLine);
+        presenter.gravaMensagem("Jean Paul", ed.getText().toString());
+        escondeEditMensagem();
+    }
+
+    @Override
+    public void escondeEditMensagem() {
+        EditText ed = findViewById(R.id.editTextTextMultiLine);
+        ed.setText("");
         CardView cv = (CardView) findViewById(R.id.cardMensagem);
         cv.setVisibility(View.INVISIBLE);
 
     }
-    public void clickGravaMensagem(View v) {
+
+    @Override
+    public void mostraEditMensagem() {
         CardView cv = (CardView) findViewById(R.id.cardMensagem);
-        EditText ed = findViewById(R.id.editTextTextMultiLine);
-        ChatMensagem chat =  new ChatMensagem("Jean Paul", ed.getText().toString(),
-                new Timestamp(Calendar.getInstance().getTime()));
-        ChatMensagemServices.gravaChatMensagem(chat);
-        ed.setText("");
-        cv.setVisibility(View.INVISIBLE);
+        cv.setVisibility(View.VISIBLE);
+
     }
 
     public void clickLido(View v) {
         Switch sw = (Switch) v;
         ChatMensagem chat = (ChatMensagem) sw.getTag();
-        Log.d("Principal",chat.getId()+" "+chat.isLido());
-        chat.setLido( sw.isChecked() );
-        ChatMensagemServices.gravaChatMensagem(chat);
+        presenter.marcaLido(chat, sw.isChecked());
     }
 
     @BindingAdapter({"imageUrl"})
     public static void loadImage(ImageView view, String url) {
         Picasso.get().load(url).into(view);
+    }
+
+    @Override
+    public void carregaRecyclerView(List<ChatMensagem> mensagens) {
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        RecyclerView rv = findViewById(R.id.rvChat);
+        rv.setLayoutManager(llm);
+        chatAdapter = new ChatMensagemAdapter(mensagens);
+        rv.setAdapter(chatAdapter);
     }
 }
